@@ -15,25 +15,75 @@ return {
     end,
   },
 
+  -- load luasnips + cmp related in insert mode only
   {
-  	"williamboman/mason.nvim",
-  	opts = {
-  		ensure_installed = {
-  			"lua-language-server", "stylua",
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      {
+        -- snippet plugin
+        "L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
+        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+        config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require "nvchad.configs.luasnip"
+          require'luasnip'.filetype_extend("html", {"css", "javascript"})
+          require'luasnip'.filetype_extend("htmldjango", {"html", "css", "javascript"})
+        end,
+      },
+
+      -- autopairing of (){}[] etc
+      {
+        "windwp/nvim-autopairs",
+        opts = {
+          fast_wrap = {},
+          disable_filetype = { "TelescopePrompt", "vim" },
+        },
+        config = function(_, opts)
+          require("nvim-autopairs").setup(opts)
+
+          -- setup cmp for autopairs
+          local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+          require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+      },
+
+      -- cmp sources plugins
+      {
+        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+      },
+    },
+    opts = function()
+      return require "nvchad.configs.cmp"
+    end,
+    config = function(_, opts)
+      require("cmp").setup(opts)
+    end,
+  },
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "lua-language-server", "stylua",
         "html-lsp", "css-lsp",
         "typescript-language-server",  "eslint_d",
         "prettier",
         "rust-analyzer",
-  		},
-  	},
+      },
+    },
   },
 
   {
-  	"nvim-treesitter/nvim-treesitter",
-  	opts = {
-  		ensure_installed = {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
         -- defaults 
-  			"vim", "lua", "vimdoc",
+        "vim", "lua", "vimdoc",
 
         -- web dev
         "html", "css", "javascript", "typescript",
@@ -41,10 +91,10 @@ return {
         -- web server dev
         "go",
 
-       -- low level
+        -- low level
         "rust",
-  		},
-  	},
+      },
+    },
   },
 
   -- git stuff

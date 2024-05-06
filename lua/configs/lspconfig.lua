@@ -4,7 +4,7 @@ local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls", "tsserver", "rust_analyzer" }
+local servers = { "rust_analyzer" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -15,15 +15,43 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+lspconfig.html.setup({
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+  filetypes = {'html', 'htmldjango'},
+})
+
+lspconfig.cssls.setup {
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+  filetypes = {'css', 'html', 'htmldjango'},
+}
+
 -- typescript
 lspconfig.tsserver.setup {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
+  filetypes = {'javascript', 'html', 'htmldjango'},
 }
 
-lspconfig.eslint.setup {
+lspconfig.emmet_language_server.setup {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
 }
+
+-- lspconfig.eslint.setup {
+--   on_attach = on_attach,
+--   on_init = on_init,
+--   capabilities = capabilities,
+-- }
+
+-- lspconfig.jinja_lsp.setup {
+--   on_attach = on_attach,
+--   on_init = on_init,
+--   capabilities = capabilities,
+--   filetypes = { "jinja", "htmldjango" }
+-- }
