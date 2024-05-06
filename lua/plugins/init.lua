@@ -28,8 +28,7 @@ return {
         config = function(_, opts)
           require("luasnip").config.set_config(opts)
           require "nvchad.configs.luasnip"
-          require'luasnip'.filetype_extend("html", {"css", "javascript"})
-          require'luasnip'.filetype_extend("htmldjango", {"html", "css", "javascript"})
+          require'luasnip'.filetype_extend("htmldjango", {"html"})
         end,
       },
 
