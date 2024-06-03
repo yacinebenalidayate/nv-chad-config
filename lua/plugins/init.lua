@@ -69,7 +69,7 @@ return {
     opts = {
       ensure_installed = {
         "lua-language-server", "stylua",
-        "html-lsp", "css-lsp",
+        "html-lsp", "css-lsp", "emmet-language-server",
         "typescript-language-server",  "eslint_d",
         "prettier",
         "rust-analyzer",
